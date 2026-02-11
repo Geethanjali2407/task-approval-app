@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Task Approval App</title>
+    <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+<header class="header">
+    <div>
+        <h1>Task & Booking Management</h1>
+        <p class="muted">Create tasks, filter/sort, and approve/reject with a simple workflow.</p>
+    </div>
+    <div class="header-actions">
+        <span id="whoami" class="pill hidden"></span>
+        <button id="logoutBtn" class="btn btn-secondary hidden">Logout</button>
+    </div>
+</header>
+
+<main class="container">
+    <!-- LOGIN -->
+    <section id="loginCard" class="card">
+        <h2>Login</h2>
+        <p class="muted">Use seeded accounts: <b>user1/pass</b>, <b>manager1/pass</b>, <b>admin1/pass</b></p>
+        <div class="grid-2">
+            <div>
+                <label>Username</label>
+                <input id="username" type="text" placeholder="Enter username" autocomplete="username" />
+            </div>
+            <div>
+                <label>Password</label>
+                <input id="password" type="password" placeholder="Enter password" autocomplete="current-password" />
+            </div>
+        </div>
+        <div class="row">
+            <button id="loginBtn" class="btn">Login</button>
+            <span id="loginMsg" class="msg"></span>
+        </div>
+    </section>
+
+    <!-- APP -->
+    <section id="appArea" class="hidden">
+        <div class="grid-2">
+            <!-- CREATE TASK -->
+            <section class="card">
+                <h2>Create Task</h2>
+                <form id="createTaskForm">
+                    <div class="grid-2">
+                        <div>
+                            <label>Title *</label>
+                            <input id="title" required placeholder="Book conference room"/>
+                        </div>
+                        <div>
+                            <label>Date/Time (local) *</label>
+                            <input id="dateTime" type="datetime-local" required />
+                            <div class="hint muted">We’ll convert to UTC for the API.</div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label>Description</label>
+                        <textarea id="description" rows="3" placeholder="Team meeting..."></textarea>
+                    </div>
+
+                    <div class="grid-2">
+                        <div>
+                            <label>Priority *</label>
+                            <select id="priority" required>
+                                <option value="LOW">LOW</option>
+                                <option value="MEDIUM" selected>MEDIUM</option>
+                                <option value="HIGH">HIGH</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label>Assigned User *</label>
+                            <select id="assignedUserId" required></select>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <button class="btn" type="submit">Create</button>
+                        <span id="createMsg" class="msg"></span>
+                    </div>
+                </form>
+            </section>
+
+            <!-- LIST CONTROLS -->
+            <section class="card">
+                <h2>List View</h2>
+
+                <div class="grid-3">
+                    <div>
+                        <label>Status</label>
+                        <select id="filterStatus">
+                            <option value="">ALL</option>
+                            <option value="PENDING">PENDING</option>
+                            <option value="APPROVED">APPROVED</option>
+                            <option value="REJECTED">REJECTED</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label>Sort By</label>
+                        <select id="sortBy">
+                            <option value="createdDate" selected>createdDate</option>
+                            <option value="dateTime">dateTime</option>
+                            <option value="priority">priority</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label>Direction</label>
+                        <select id="direction">
+                            <option value="desc" selected>desc</option>
+                            <option value="asc">asc</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <button id="refreshBtn" class="btn btn-secondary" type="button">Refresh</button>
+                    <span id="listMsg" class="msg"></span>
+                </div>
+
+                <div class="muted small">
+                    Tip: Approve/Reject buttons show only for <b>MANAGER</b> / <b>ADMIN</b>.
+                </div>
+            </section>
+        </div>
+
+        <!-- DASHBOARD -->
+        <section class="card">
+            <div class="dash-head">
+                <h2>Dashboard</h2>
+                <span class="muted">Pending | Approved | Rejected</span>
+            </div>
+
+            <div class="grid-3">
+                <div>
+                    <h3>PENDING</h3>
+                    <div id="pendingList" class="list"></div>
+                </div>
+                <div>
+                    <h3>APPROVED</h3>
+                    <div id="approvedList" class="list"></div>
+                </div>
+                <div>
+                    <h3>REJECTED</h3>
+                    <div id="rejectedList" class="list"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ALL TASKS TABLE -->
+        <section class="card">
+            <h2>All Tasks (Filtered)</h2>
+            <div class="table-wrap">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Status</th>
+                        <th>Priority</th>
+                        <th>Date/Time</th>
+                        <th>Assigned</th>
+                        <th>Created</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tasksTableBody"></tbody>
+                </table>
+            </div>
+        </section>
+    </section>
+</main>
+
+<footer>
+    © 2026 Geethanjali Maharaja • Task Management System
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>
